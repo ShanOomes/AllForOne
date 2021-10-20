@@ -11,6 +11,10 @@ public class UImanager : MonoBehaviour
     public TextMeshProUGUI balanceBlue;
     public TextMeshProUGUI balanceRed;
 
+    public TextMeshProUGUI title;
+
+    public TMP_InputField input;
+
     [Header("Slider Values")]
     public TextMeshProUGUI healthValueText;
     public TextMeshProUGUI strengthValueText;

@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum BattleState { START, BLUETURN, REDTURN, WON, LOST }
-public enum PlayerTurnState { Blue, Red }
+public enum BattleState { START, BLUETURN, REDTURN, REDSETUP, BLUESETUP, WON, LOST }
 public class BattleSystem : MonoBehaviour
 {
     public GameObject unit;
 
     public BattleState battleState;
-    public PlayerTurnState playerState;
 
     private Player redPlayer;
     private Player bluePlayer;
@@ -27,10 +25,10 @@ public class BattleSystem : MonoBehaviour
         cam = Camera.main;
         placeAbleMask = LayerMask.GetMask("PlaceAble");
 
-        battleState = BattleState.START;
         if (SetupBattle())
         {
-            playerState = PlayerTurnState.Blue;
+            battleState = BattleState.BLUESETUP;
+            UImanager.instance.title.text = "Turn: Blue";
         }
     }
 
@@ -47,13 +45,15 @@ public class BattleSystem : MonoBehaviour
     bool SetUnit(Vector3 pos)
     {
         GameObject tmp = Instantiate(unit, pos, Quaternion.identity);
-        switch (playerState)
+        switch (battleState)
         {
-            case PlayerTurnState.Blue:
-                tmp.GetComponent<Unit>().SetValues("Henk", UImanager.instance.Health, UImanager.instance.Strength, UImanager.instance.Speed, UImanager.instance.Defense, Team.Blue);
+            case BattleState.BLUESETUP:
+                tmp.GetComponent<Unit>().SetValues(UImanager.instance.input.text, UImanager.instance.Health, UImanager.instance.Strength, UImanager.instance.Speed, UImanager.instance.Defense, Team.Blue);
+                tmp.GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
                 break;
-            case PlayerTurnState.Red:
-                tmp.GetComponent<Unit>().SetValues("Henk", 10f, 10f, 10f, 10f, Team.Red);
+            case BattleState.REDSETUP:
+                tmp.GetComponent<Unit>().SetValues(UImanager.instance.input.text, UImanager.instance.Health, UImanager.instance.Strength, UImanager.instance.Speed, UImanager.instance.Defense, Team.Red);
+                tmp.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
                 break;
             default:
                 break;
@@ -87,20 +87,33 @@ public class BattleSystem : MonoBehaviour
                     {
                         if (SetUnit(hit.point))
                         {
-                            print("Succes");
                             isPlacing = false;
-                            if (playerState == PlayerTurnState.Blue)
+                            if (battleState == BattleState.BLUESETUP)
                             {
-                                playerState = PlayerTurnState.Red;
+                                battleState = BattleState.REDSETUP;
+                                UImanager.instance.title.text = "Turn: Red";
                             }
-                            else if (playerState == PlayerTurnState.Red)
+                            else if (battleState == BattleState.REDSETUP)
                             {
-                                playerState = PlayerTurnState.Blue;
+                                battleState = BattleState.BLUESETUP;
+                                UImanager.instance.title.text = "Turn: Blue";
                             }
+                            StartCoroutine(ResetSetup());
                         }
                     }
                 }
             }
         }
+    }
+
+    public IEnumerator ResetSetup()
+    {
+        yield return new WaitForSeconds(1f);
+        UImanager.instance.selectionPanel.SetActive(true);
+
+        UImanager.instance.healthSlider.value = 0;
+        UImanager.instance.strengthSlider.value = 0;
+        UImanager.instance.speedSlider.value = 0;
+        UImanager.instance.defenseSlider.value = 0;
     }
 }

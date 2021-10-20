@@ -5,12 +5,12 @@ using UnityEngine;
 public enum Team { Blue, Red, Nothing };
 public class Unit : MonoBehaviour
 {
-    private string name;
+    public string name;
 
-    private float health;
-    private float strength;
-    private float speed;
-    private float defense;
+    public float health;
+    public float strength;
+    public float speed;
+    public float defense;
 
     public Team team;
 
