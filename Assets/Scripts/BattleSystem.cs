@@ -45,14 +45,15 @@ public class BattleSystem : MonoBehaviour
     bool SetUnit(Vector3 pos)
     {
         GameObject tmp = Instantiate(unit, pos, Quaternion.identity);
+        float[] values = UImanager.instance.GetValues();
         switch (battleState)
         {
             case BattleState.BLUESETUP:
-                tmp.GetComponent<Unit>().SetValues(UImanager.instance.input.text, UImanager.instance.Health, UImanager.instance.Strength, UImanager.instance.Speed, UImanager.instance.Defense, Team.Blue);
+                tmp.GetComponent<Unit>().SetValues(UImanager.instance.input.text, values[0], values[1], values[2], values[3], Team.Blue);
                 tmp.GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
                 break;
             case BattleState.REDSETUP:
-                tmp.GetComponent<Unit>().SetValues(UImanager.instance.input.text, UImanager.instance.Health, UImanager.instance.Strength, UImanager.instance.Speed, UImanager.instance.Defense, Team.Red);
+                tmp.GetComponent<Unit>().SetValues(UImanager.instance.input.text, values[0], values[1], values[2], values[3], Team.Red);
                 tmp.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
                 break;
             default:
@@ -111,9 +112,9 @@ public class BattleSystem : MonoBehaviour
         yield return new WaitForSeconds(1f);
         UImanager.instance.selectionPanel.SetActive(true);
 
-        UImanager.instance.healthSlider.value = 0;
-        UImanager.instance.strengthSlider.value = 0;
-        UImanager.instance.speedSlider.value = 0;
-        UImanager.instance.defenseSlider.value = 0;
+        for (int i = 0; i < UImanager.instance.listSliders.Count; i++)
+        {
+            UImanager.instance.listSliders[i].value = 0;
+        }
     }
 }

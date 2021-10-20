@@ -16,26 +16,12 @@ public class UImanager : MonoBehaviour
     public TMP_InputField input;
 
     [Header("Slider Values")]
-    public TextMeshProUGUI healthValueText;
-    public TextMeshProUGUI strengthValueText;
-    public TextMeshProUGUI speedValueText;
-    public TextMeshProUGUI DefenseValueText;
+    public List<TextMeshProUGUI> listValues;
 
     [Header("Sliders")]
-    public Slider healthSlider;
-    public Slider strengthSlider;
-    public Slider speedSlider;
-    public Slider defenseSlider;
+    public List<Slider> listSliders;
 
-    private float health;
-    private float strength;
-    private float speed;
-    private float defense;
-
-    public float Health { get { return this.health; } }
-    public float Strength { get { return this.strength; } }
-    public float Speed { get { return this.speed; } }
-    public float Defense { get { return this.defense; } }
+    private float[] stats = { 0f, 0f, 0f, 0f };
 
     public GameObject selectionPanel;
     private void Awake()
@@ -51,34 +37,27 @@ public class UImanager : MonoBehaviour
         }
     }
 
-    public void SliderChangeHealth(float value)
-    {
-        healthValueText.text = value.ToString();
-        health = value;
-    }
-
-    public void SliderChangeStrength(float value)
-    {
-        strengthValueText.text = value.ToString();
-        strength = value;
-    }
-
-    public void SliderChangeSpeed(float value)
-    {
-        speedValueText.text = value.ToString();
-        speed = value;
-    }
-
-    public void SliderChangeDefense(float value)
-    {
-        DefenseValueText.text = value.ToString();
-        defense = value;
-    }
-
     // Start is called before the first frame update
     void Start()
     {
-        
+        for (int i = 0; i < listValues.Count; i++)
+        {
+            listValues[i].text = "0";
+        }
+    }
+
+    public void SliderOnchange()
+    {
+        for (int i = 0; i < listSliders.Count; i++)
+        {
+            listValues[i].text = listSliders[i].value.ToString();
+            stats[i] = listSliders[i].value;
+        }
+    }
+
+    public float[] GetValues()
+    {
+        return stats;
     }
 
     // Update is called once per frame

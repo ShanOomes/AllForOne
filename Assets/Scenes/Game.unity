@@ -564,8 +564,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926628001}
         m_TargetAssemblyTypeName: UImanager, Assembly-CSharp
-        m_MethodName: SliderChangeSpeed
-        m_Mode: 0
+        m_MethodName: SliderOnchange
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1422,8 +1422,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926628001}
         m_TargetAssemblyTypeName: UImanager, Assembly-CSharp
-        m_MethodName: SliderChangeHealth
-        m_Mode: 0
+        m_MethodName: SliderOnchange
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1906,8 +1906,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926628001}
         m_TargetAssemblyTypeName: UImanager, Assembly-CSharp
-        m_MethodName: SliderChangeDefense
-        m_Mode: 0
+        m_MethodName: SliderOnchange
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3605,8 +3605,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926628001}
         m_TargetAssemblyTypeName: UImanager, Assembly-CSharp
-        m_MethodName: SliderChangeStrength
-        m_Mode: 0
+        m_MethodName: SliderOnchange
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4392,14 +4392,21 @@ MonoBehaviour:
   balanceRed: {fileID: 781683776}
   title: {fileID: 619546633}
   input: {fileID: 1298165768}
-  healthValueText: {fileID: 1502536828}
-  strengthValueText: {fileID: 2040754733}
-  speedValueText: {fileID: 1699821004}
-  DefenseValueText: {fileID: 1204579938}
-  healthSlider: {fileID: 730749308}
-  strengthSlider: {fileID: 1563925618}
-  speedSlider: {fileID: 258177589}
-  defenseSlider: {fileID: 1060226265}
+  listValues:
+  - {fileID: 1502536828}
+  - {fileID: 2040754733}
+  - {fileID: 1699821004}
+  - {fileID: 1204579938}
+  listSliders:
+  - {fileID: 730749308}
+  - {fileID: 1563925618}
+  - {fileID: 258177589}
+  - {fileID: 1060226265}
+  stats:
+  - 0
+  - 0
+  - 0
+  - 0
   selectionPanel: {fileID: 1460063537}
 --- !u!4 &1926628002
 Transform:
