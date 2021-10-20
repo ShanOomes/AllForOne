@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+
 
 public enum BattleState { START, BLUETURN, REDTURN, WON, LOST }
 public enum PlayerTurnState { Blue, Red }
@@ -12,18 +12,15 @@ public class BattleSystem : MonoBehaviour
     public BattleState battleState;
     public PlayerTurnState playerState;
 
-    public TextMeshProUGUI balanceBlue;
-    public TextMeshProUGUI balanceRed;
-
     private Player redPlayer;
     private Player bluePlayer;
-
-    //public GameObject selectionPanel;
 
     private Camera cam;
     private Ray ray;
 
     private int placeAbleMask;
+
+    private bool isPlacing = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,38 +28,37 @@ public class BattleSystem : MonoBehaviour
         placeAbleMask = LayerMask.GetMask("PlaceAble");
 
         battleState = BattleState.START;
-        SetupBattle();
+        if (SetupBattle())
+        {
+            playerState = PlayerTurnState.Blue;
+        }
     }
 
-    void SetupBattle()
+    bool SetupBattle()
     {
         Player redPlayer = new Player("Red");
         Player bluePlayer = new Player("Blue");
 
-        balanceRed.text = redPlayer.Balance.ToString();
-        balanceBlue.text = bluePlayer.Balance.ToString();
+        UImanager.instance.balanceRed.text = redPlayer.Balance.ToString();
+        UImanager.instance.balanceBlue.text = bluePlayer.Balance.ToString();
+        return true;
     }
 
-    Unit CreateUnit(string name, float health, float strength, float speed, float defense)
+    bool SetUnit(Vector3 pos)
     {
-        Unit unit;
+        GameObject tmp = Instantiate(unit, pos, Quaternion.identity);
         switch (playerState)
         {
             case PlayerTurnState.Blue:
-                unit = new Unit(name, health, strength, speed, defense, Team.Blue);
-                return unit;
+                tmp.GetComponent<Unit>().SetValues("Henk", UImanager.instance.Health, UImanager.instance.Strength, UImanager.instance.Speed, UImanager.instance.Defense, Team.Blue);
+                break;
             case PlayerTurnState.Red:
-                unit = new Unit(name, health, strength, speed, defense, Team.Red);
-                return unit;
+                tmp.GetComponent<Unit>().SetValues("Henk", 10f, 10f, 10f, 10f, Team.Red);
+                break;
             default:
                 break;
         }
-        return null;
-    }
-
-    void PlaceUnit(Vector3 pos)
-    {
-        Instantiate(unit, pos, Quaternion.identity).GetComponent<Unit>().SetValues("Henk", 10f, 10f, 10f, 10f, Team.Blue);
+        return true;
     }
     void ApplyUnit()
     {
@@ -71,17 +67,38 @@ public class BattleSystem : MonoBehaviour
         //Placing places instance of Unity prefab with the correct stats
     }
 
+    public void ButtonClick()
+    {
+        UImanager.instance.selectionPanel.SetActive(false);
+        isPlacing = true;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        ray = cam.ScreenPointToRay(Input.mousePosition);
-        if (Input.GetMouseButtonDown(0))
+        if (isPlacing)
         {
-            if (Physics.Raycast(ray, out RaycastHit hit, 100.0f, placeAbleMask))
+            ray = cam.ScreenPointToRay(Input.mousePosition);
+            if (Input.GetMouseButtonDown(0))
             {
-                if (hit.collider != null)
+                if (Physics.Raycast(ray, out RaycastHit hit, 100.0f, placeAbleMask))
                 {
-                    PlaceUnit(hit.point);
+                    if (hit.collider != null)
+                    {
+                        if (SetUnit(hit.point))
+                        {
+                            print("Succes");
+                            isPlacing = false;
+                            if (playerState == PlayerTurnState.Blue)
+                            {
+                                playerState = PlayerTurnState.Red;
+                            }
+                            else if (playerState == PlayerTurnState.Red)
+                            {
+                                playerState = PlayerTurnState.Blue;
+                            }
+                        }
+                    }
                 }
             }
         }
