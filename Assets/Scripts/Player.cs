@@ -26,4 +26,18 @@ public class Player : MonoBehaviour
     {
         amountOfUnits++;
     }
+
+    public bool CheckBalance(float cost)
+    {
+        if((balance - cost) >= 0 && cost >= 10)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void ReduceBalance(float cost)
+    {
+        balance = balance - cost;
+    }
 }

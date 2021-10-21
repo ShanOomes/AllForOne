@@ -34,8 +34,8 @@ public class BattleSystem : MonoBehaviour
 
     bool SetupBattle()
     {
-        Player redPlayer = new Player("Red");
-        Player bluePlayer = new Player("Blue");
+        redPlayer = new Player("Red");
+        bluePlayer = new Player("Blue");
 
         UImanager.instance.balanceRed.text = redPlayer.Balance.ToString();
         UImanager.instance.balanceBlue.text = bluePlayer.Balance.ToString();
@@ -70,8 +70,19 @@ public class BattleSystem : MonoBehaviour
 
     public void ButtonClick()
     {
-        UImanager.instance.selectionPanel.SetActive(false);
-        isPlacing = true;
+        if(battleState == BattleState.BLUESETUP && bluePlayer.CheckBalance(UImanager.instance.GetCost()))
+        {
+            bluePlayer.ReduceBalance(UImanager.instance.GetCost());
+            UImanager.instance.balanceBlue.text = bluePlayer.Balance.ToString();
+            UImanager.instance.selectionPanel.SetActive(false);
+            isPlacing = true;
+        }else if(battleState == BattleState.REDSETUP && redPlayer.CheckBalance(UImanager.instance.GetCost()))
+        {
+            redPlayer.ReduceBalance(UImanager.instance.GetCost());
+            UImanager.instance.balanceRed.text = redPlayer.Balance.ToString();
+            UImanager.instance.selectionPanel.SetActive(false);
+            isPlacing = true;
+        }
     }
 
     // Update is called once per frame
@@ -89,17 +100,22 @@ public class BattleSystem : MonoBehaviour
                         if (SetUnit(hit.point))
                         {
                             isPlacing = false;
-                            if (battleState == BattleState.BLUESETUP)
+                            if (battleState == BattleState.BLUESETUP && redPlayer.Balance >= 10)
                             {
                                 battleState = BattleState.REDSETUP;
                                 UImanager.instance.title.text = "Turn: Red";
+                                StartCoroutine(ResetSetup());
                             }
-                            else if (battleState == BattleState.REDSETUP)
+                            else if (battleState == BattleState.REDSETUP && bluePlayer.Balance >= 10)
                             {
                                 battleState = BattleState.BLUESETUP;
                                 UImanager.instance.title.text = "Turn: Blue";
+                                StartCoroutine(ResetSetup());
                             }
-                            StartCoroutine(ResetSetup());
+                            else
+                            {
+                                print("Start of the game");
+                            }
                         }
                     }
                 }

@@ -24,6 +24,9 @@ public class UImanager : MonoBehaviour
     private float[] stats = { 0f, 0f, 0f, 0f };
 
     public GameObject selectionPanel;
+
+    public TextMeshProUGUI textCost;
+    private float cost;
     private void Awake()
     {
         if (instance == null)
@@ -53,6 +56,14 @@ public class UImanager : MonoBehaviour
             listValues[i].text = listSliders[i].value.ToString();
             stats[i] = listSliders[i].value;
         }
+
+        cost = stats[0] + stats[1] + stats[2] + stats[3];
+        textCost.text = cost.ToString();
+    }
+
+    public float GetCost()
+    {
+        return cost;
     }
 
     public float[] GetValues()
