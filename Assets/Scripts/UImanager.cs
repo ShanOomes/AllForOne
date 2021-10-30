@@ -11,7 +11,8 @@ public class UImanager : MonoBehaviour
     public TextMeshProUGUI balanceBlue;
     public TextMeshProUGUI balanceRed;
 
-    public TextMeshProUGUI title;
+    public GameObject playerBlue;
+    public GameObject playerRed;
 
     public TMP_InputField input;
 
@@ -58,6 +59,32 @@ public class UImanager : MonoBehaviour
         }
 
         cost = stats[0] + stats[1] + stats[2] + stats[3];
+
+        switch (BattleSystem.instance.battleState)
+        {
+            case BattleState.REDSETUP:
+                if (!BattleSystem.instance.redPlayer.CheckBalance(cost))
+                {
+                    textCost.color = new Color(1, 0, 0, 255);
+                }
+                else
+                {
+                    textCost.color = new Color(255, 255, 255, 255);
+                }
+                break;
+            case BattleState.BLUESETUP:
+                if (!BattleSystem.instance.bluePlayer.CheckBalance(cost))
+                {
+                    textCost.color = new Color(1, 0, 0, 255);
+                }
+                else
+                {
+                    textCost.color = new Color(255, 255, 255, 255);
+                }
+                break;
+            default:
+                break;
+        }
         textCost.text = cost.ToString();
     }
 
@@ -71,6 +98,20 @@ public class UImanager : MonoBehaviour
         return stats;
     }
 
+    public void highlight(string player)
+    {
+        if(player == "blue")
+        {
+            playerBlue.SetActive(true);
+            playerRed.SetActive(false);
+        }
+
+        if(player == "red")
+        {
+            playerRed.SetActive(true);
+            playerBlue.SetActive(false);
+        }
+    }
     // Update is called once per frame
     void Update()
     {

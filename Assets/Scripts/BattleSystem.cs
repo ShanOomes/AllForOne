@@ -6,12 +6,27 @@ using UnityEngine;
 public enum BattleState { START, BLUETURN, REDTURN, REDSETUP, BLUESETUP, WON, LOST }
 public class BattleSystem : MonoBehaviour
 {
+    public static BattleSystem instance { get; set; }
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            //DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            //Destroy(gameObject);
+        }
+    }
+
     public GameObject unit;
 
     public BattleState battleState;
 
-    private Player redPlayer;
-    private Player bluePlayer;
+    public Player redPlayer;
+    public Player bluePlayer;
 
     private Camera cam;
     private Ray ray;
@@ -25,10 +40,11 @@ public class BattleSystem : MonoBehaviour
         cam = Camera.main;
         placeAbleMask = LayerMask.GetMask("PlaceAble");
 
+        UImanager.instance.selectionPanel.SetActive(true);
         if (SetupBattle())
         {
             battleState = BattleState.BLUESETUP;
-            UImanager.instance.title.text = "Turn: Blue";
+            UImanager.instance.highlight("blue");
         }
     }
 
@@ -70,18 +86,26 @@ public class BattleSystem : MonoBehaviour
 
     public void ButtonClick()
     {
-        if(battleState == BattleState.BLUESETUP && bluePlayer.CheckBalance(UImanager.instance.GetCost()))
+        UImanager manager = UImanager.instance;
+        if(battleState == BattleState.BLUESETUP)
         {
-            bluePlayer.ReduceBalance(UImanager.instance.GetCost());
-            UImanager.instance.balanceBlue.text = bluePlayer.Balance.ToString();
-            UImanager.instance.selectionPanel.SetActive(false);
-            isPlacing = true;
-        }else if(battleState == BattleState.REDSETUP && redPlayer.CheckBalance(UImanager.instance.GetCost()))
+            if (bluePlayer.CheckBalance(manager.GetCost()))
+            {
+                bluePlayer.ReduceBalance(manager.GetCost());
+                UImanager.instance.balanceBlue.text = bluePlayer.Balance.ToString();
+                UImanager.instance.selectionPanel.SetActive(false);
+                isPlacing = true;
+            }
+        }
+        else
         {
-            redPlayer.ReduceBalance(UImanager.instance.GetCost());
-            UImanager.instance.balanceRed.text = redPlayer.Balance.ToString();
-            UImanager.instance.selectionPanel.SetActive(false);
-            isPlacing = true;
+            if (redPlayer.CheckBalance(manager.GetCost()))
+            {
+                redPlayer.ReduceBalance(manager.GetCost());
+                UImanager.instance.balanceRed.text = redPlayer.Balance.ToString();
+                UImanager.instance.selectionPanel.SetActive(false);
+                isPlacing = true;
+            }
         }
     }
 
@@ -103,13 +127,13 @@ public class BattleSystem : MonoBehaviour
                             if (battleState == BattleState.BLUESETUP && redPlayer.Balance >= 10)
                             {
                                 battleState = BattleState.REDSETUP;
-                                UImanager.instance.title.text = "Turn: Red";
+                                UImanager.instance.highlight("red");
                                 StartCoroutine(ResetSetup());
                             }
                             else if (battleState == BattleState.REDSETUP && bluePlayer.Balance >= 10)
                             {
                                 battleState = BattleState.BLUESETUP;
-                                UImanager.instance.title.text = "Turn: Blue";
+                                UImanager.instance.highlight("blue");
                                 StartCoroutine(ResetSetup());
                             }
                             else
@@ -127,7 +151,7 @@ public class BattleSystem : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         UImanager.instance.selectionPanel.SetActive(true);
-
+        UImanager.instance.textCost.color = new Color(255, 255, 255, 1);
         for (int i = 0; i < UImanager.instance.listSliders.Count; i++)
         {
             UImanager.instance.listSliders[i].value = 0;
