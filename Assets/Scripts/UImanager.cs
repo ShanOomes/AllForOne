@@ -46,7 +46,7 @@ public class UImanager : MonoBehaviour
     {
         for (int i = 0; i < listValues.Count; i++)
         {
-            listValues[i].text = "0";
+            listValues[i].text = "1";
         }
     }
 

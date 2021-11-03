@@ -22,11 +22,6 @@ public class Player : MonoBehaviour
         this.balance = 100f;
     }
 
-    public void AddUnit()
-    {
-        amountOfUnits++;
-    }
-
     public bool CheckBalance(float cost)
     {
         if((balance - cost) >= 0 && cost >= 10)
@@ -38,6 +33,10 @@ public class Player : MonoBehaviour
 
     public void ReduceBalance(float cost)
     {
+        //Reduce balance of player
         balance = balance - cost;
+
+        //increment unit count of player
+        amountOfUnits++;
     }
 }
