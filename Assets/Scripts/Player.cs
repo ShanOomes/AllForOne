@@ -22,8 +22,9 @@ public class Player : MonoBehaviour
         this.balance = 100f;
     }
 
-    public bool CheckBalance(float cost)
+    public bool CheckBalance(int cost)
     {
+        //Check if balance is within 
         if((balance - cost) >= 0 && cost >= 10)
         {
             return true;
@@ -31,7 +32,7 @@ public class Player : MonoBehaviour
         return false;
     }
 
-    public void ReduceBalance(float cost)
+    public void ReduceBalance(int cost)
     {
         //Reduce balance of player
         balance = balance - cost;

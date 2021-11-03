@@ -22,12 +22,10 @@ public class UImanager : MonoBehaviour
     [Header("Sliders")]
     public List<Slider> listSliders;
 
-    private float[] stats = { 0f, 0f, 0f, 0f };
-
     public GameObject selectionPanel;
 
     public TextMeshProUGUI textCost;
-    private float cost;
+    private int cost;
     private void Awake()
     {
         if (instance == null)
@@ -44,22 +42,38 @@ public class UImanager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < listValues.Count; i++)
-        {
-            listValues[i].text = "1";
-        }
+        UpdateSliderValues();
     }
 
     public void SliderOnchange()
     {
+        UpdateSliderValues();
+        UpdateText();
+    }
+
+    private void UpdateSliderValues()
+    {
+        int value = 0;
         for (int i = 0; i < listSliders.Count; i++)
         {
             listValues[i].text = listSliders[i].value.ToString();
-            stats[i] = listSliders[i].value;
+
+            if(i == 0 || i == 2)
+            {
+                value += (int)map(listSliders[i].value, 1, 100, 3, 30);
+            }
+            else
+            {
+                value += (int)map(listSliders[i].value, 1, 100, 2, 20);
+            }
+            
         }
+        cost = value;
+        textCost.text = cost.ToString();
+    }
 
-        cost = stats[0] + stats[1] + stats[2] + stats[3];
-
+    private void UpdateText()
+    {
         switch (BattleSystem.instance.battleState)
         {
             case BattleState.REDSETUP:
@@ -82,20 +96,17 @@ public class UImanager : MonoBehaviour
                     textCost.color = new Color(255, 255, 255, 255);
                 }
                 break;
-            default:
-                break;
         }
-        textCost.text = cost.ToString();
     }
 
-    public float GetCost()
+    public int GetTotalCost()
     {
         return cost;
     }
 
-    public float[] GetValues()
+    public List<Slider> GetValues()
     {
-        return stats;
+        return listSliders;
     }
 
     public void highlight(string player)
@@ -116,5 +127,10 @@ public class UImanager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    float map(float s, float a1, float a2, float b1, float b2)
+    {
+        return b1 + (s - a1) * (b2 - b1) / (a2 - a1);
     }
 }

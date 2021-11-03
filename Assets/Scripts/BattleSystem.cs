@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public enum BattleState { START, BLUETURN, REDTURN, REDSETUP, BLUESETUP, WON, LOST }
@@ -61,15 +62,15 @@ public class BattleSystem : MonoBehaviour
     bool SetUnit(Vector3 pos)
     {
         GameObject tmp = Instantiate(unit, pos, Quaternion.identity);
-        float[] values = UImanager.instance.GetValues();
+        List<Slider> sliders = UImanager.instance.GetValues();
         switch (battleState)
         {
             case BattleState.BLUESETUP:
-                tmp.GetComponent<Unit>().SetValues(UImanager.instance.input.text, values[0], values[1], values[2], values[3], Team.Blue);
+                tmp.GetComponent<Unit>().SetValues(UImanager.instance.input.text, sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value, Team.Blue);
                 tmp.GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
                 break;
             case BattleState.REDSETUP:
-                tmp.GetComponent<Unit>().SetValues(UImanager.instance.input.text, values[0], values[1], values[2], values[3], Team.Red);
+                tmp.GetComponent<Unit>().SetValues(UImanager.instance.input.text, sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value, Team.Red);
                 tmp.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
                 break;
             default:
@@ -89,9 +90,9 @@ public class BattleSystem : MonoBehaviour
         UImanager manager = UImanager.instance;
         if(battleState == BattleState.BLUESETUP)
         {
-            if (bluePlayer.CheckBalance(manager.GetCost()))
+            if (bluePlayer.CheckBalance(manager.GetTotalCost()))
             {
-                bluePlayer.ReduceBalance(manager.GetCost());
+                bluePlayer.ReduceBalance(manager.GetTotalCost());
                 UImanager.instance.balanceBlue.text = bluePlayer.Balance.ToString();
                 UImanager.instance.selectionPanel.SetActive(false);
                 isPlacing = true;
@@ -99,9 +100,9 @@ public class BattleSystem : MonoBehaviour
         }
         else
         {
-            if (redPlayer.CheckBalance(manager.GetCost()))
+            if (redPlayer.CheckBalance(manager.GetTotalCost()))
             {
-                redPlayer.ReduceBalance(manager.GetCost());
+                redPlayer.ReduceBalance(manager.GetTotalCost());
                 UImanager.instance.balanceRed.text = redPlayer.Balance.ToString();
                 UImanager.instance.selectionPanel.SetActive(false);
                 isPlacing = true;
