@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
     public static GameManager instance { get; set; }
     private Player[] players;
-    private List<Unit> units = new List<Unit>();
+    private List<GameObject> units = new List<GameObject>();
     public int cp = 0;
     private void Awake()
     {
@@ -48,6 +47,11 @@ public class GameManager : MonoBehaviour
         return players[cp];
     }
 
+    public Player GetSpecificPlayer(int index)
+    {
+        return players[index];
+    }
+
     public void NextPlayer()
     {
         cp++;
@@ -56,5 +60,10 @@ public class GameManager : MonoBehaviour
         {
             cp = 0;
         }   
+    }
+
+    public void AddUnit(GameObject unit)
+    {
+        units.Add(unit);
     }
 }
