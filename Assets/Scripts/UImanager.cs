@@ -63,6 +63,7 @@ public class UImanager : MonoBehaviour
 
     private void UpdateText()
     {
+        /*
         switch (GameManager.instance.battleState)
         {
             case BattleState.REDSETUP:
@@ -85,6 +86,16 @@ public class UImanager : MonoBehaviour
                     textCost.color = new Color(255, 255, 255, 255);
                 }
                 break;
+        }*/
+
+        Player cp = GameManager.instance.GetCurrentPlayer();
+        if(!cp.CheckBalance(cost))
+        {
+            textCost.color = new Color(255, 255, 255, 255);
+        }
+        else
+        {
+            textCost.color = new Color(1, 0, 0, 255);
         }
     }
     

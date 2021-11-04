@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Team { Blue, Red, Nothing };
 public class Unit : MonoBehaviour
 {
     public string name;
@@ -12,7 +11,7 @@ public class Unit : MonoBehaviour
     public float speed;
     public float defense;
 
-    public Team team;
+    public string team;
 
     //Properties
     public string Name { get { return this.name; } set { this.name  = value; } }
@@ -22,7 +21,7 @@ public class Unit : MonoBehaviour
     public float Speed { get { return this.speed; } set { this.speed  = value; } }
     public float Defense { get { return this.defense; } set { this.defense  = value; } }
 
-    public Team Team { get { return this.team; } set { this.team = value; } }
+    public string Team { get { return this.team; } set { this.team = value; } }
 
     //Standard constructor
     public Unit(){
@@ -31,11 +30,11 @@ public class Unit : MonoBehaviour
         strength = 50f;
         speed = 50f;
         defense = 50f;
-        team = Team.Nothing;
+        team = "None";
     }
 
     //Custom constructor
-    public Unit(string name, float health, float strength, float speed, float defense, Team team){
+    public Unit(string name, float health, float strength, float speed, float defense, string team){
         this.name = name;
         this.health = health;
         this.strength = strength;
@@ -44,7 +43,7 @@ public class Unit : MonoBehaviour
         this.team = team;
     }
 
-    public void SetValues(float health, float strength, float speed, float defense, Team team)
+    public void SetValues(float health, float strength, float speed, float defense, string team)
     {
         this.health = health;
         this.strength = strength;

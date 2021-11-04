@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player
 {
-    private string name;
+    public string name;
 
-    private float balance;
+    public float balance;
 
     private int amountOfUnits;
 

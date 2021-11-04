@@ -31,14 +31,18 @@ public class ConfigUnit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+    }
+
+    public void StartConfig()
+    {
         cam = Camera.main;
         placeAbleMask = LayerMask.GetMask("PlaceAble");
 
         UImanager.instance.selectionPanel.SetActive(true);
-        updateUI("title", "Turn: blue");
-        updateUI("balance", "100");
+        updateUI("title", GameManager.instance.GetCurrentPlayer().Name);
+        updateUI("balance", GameManager.instance.GetCurrentPlayer().Balance.ToString());
         RandomizeSliders();
-        GameManager.instance.battleState = BattleState.BLUESETUP;
     }
 
     void Update()
@@ -55,7 +59,7 @@ public class ConfigUnit : MonoBehaviour
                         if (SetUnit(hit.point))
                         {
                             isPlacing = false;
-                            if (GameManager.instance.battleState == BattleState.BLUESETUP && GameManager.instance.redPlayer.Balance >= 10)
+                            /*if (GameManager.instance.battleState == BattleState.BLUESETUP && GameManager.instance.redPlayer.Balance >= 10)
                             {
                                 GameManager.instance.battleState = BattleState.REDSETUP;
                                 updateUI("title", "Turn: Red");
@@ -70,6 +74,11 @@ public class ConfigUnit : MonoBehaviour
                             else
                             {
                                 print("Start of the game");
+                            }*/
+                            if(GameManager.instance.GetCurrentPlayer().Balance >= 10)
+                            {
+                                updateUI("title", "Turn: " + GameManager.instance.GetCurrentPlayer().Name);
+                                StartCoroutine(ResetSetup());
                             }
                         }
                     }
@@ -82,7 +91,7 @@ public class ConfigUnit : MonoBehaviour
     {
         GameObject tmp = Instantiate(unit, pos, Quaternion.identity);
         List<Slider> sliders = UImanager.instance.GetValues();
-        switch (GameManager.instance.battleState)
+        /*switch (GameManager.instance.battleState)
         {
             case BattleState.BLUESETUP:
                 tmp.GetComponent<Unit>().SetValues(sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value, Team.Blue);
@@ -94,7 +103,9 @@ public class ConfigUnit : MonoBehaviour
                 break;
             default:
                 break;
-        }
+        }*/
+
+        tmp.GetComponent<Unit>().SetValues(sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value, GameManager.instance.GetCurrentPlayer().Name);
         return true;
     }
 
@@ -102,7 +113,7 @@ public class ConfigUnit : MonoBehaviour
     {
         UImanager manager = UImanager.instance;
         GameManager gameManager = GameManager.instance;
-        if(GameManager.instance.battleState == BattleState.BLUESETUP)
+        /*if(GameManager.instance.battleState == BattleState.BLUESETUP)
         {
             if (gameManager.bluePlayer.CheckBalance(manager.GetTotalCost()))
             {
@@ -121,6 +132,14 @@ public class ConfigUnit : MonoBehaviour
                 manager.selectionPanel.SetActive(false);
                 isPlacing = true;
             }
+        }*/
+        if (gameManager.GetCurrentPlayer().CheckBalance(manager.GetTotalCost()))
+        {
+            gameManager.NextPlayer();
+            gameManager.GetCurrentPlayer().ReduceBalance(manager.GetTotalCost());
+            updateUI("balance", gameManager.GetCurrentPlayer().Balance.ToString());
+            manager.selectionPanel.SetActive(false);
+            isPlacing = true;
         }
     }
 
