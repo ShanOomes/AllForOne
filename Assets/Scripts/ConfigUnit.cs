@@ -76,6 +76,7 @@ public class ConfigUnit : MonoBehaviour
         List<Slider> sliders = UImanager.instance.GetValues();
 
         tmp.GetComponent<Unit>().SetValues(sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value, GameManager.instance.GetCurrentPlayer().Name);//Set stats of created unit
+        tmp.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
         GameManager.instance.AddUnit(tmp);//Add created unit to global list of units
         return true;
     }

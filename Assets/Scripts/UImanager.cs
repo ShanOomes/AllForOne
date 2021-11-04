@@ -21,17 +21,7 @@ public class UImanager : MonoBehaviour
 
     public TextMeshProUGUI textCost;
 
-    [Header("Debug")]
-    public TextMeshProUGUI balanceDebug1;
-    public TextMeshProUGUI balanceDebug2;
-
     private int cost;
-
-    private void Update()
-    {
-        balanceDebug1.text = GameManager.instance.GetSpecificPlayer(0).Balance.ToString();
-        balanceDebug2.text = GameManager.instance.GetSpecificPlayer(1).Balance.ToString();
-    }
     private void Awake()
     {
         if (instance == null)

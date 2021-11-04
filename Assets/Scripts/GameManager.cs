@@ -38,8 +38,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(players[0].Name + " " + players[0].Balance);
-        //Debug.Log(players[1].Name + " " + players[1].Balance);
     }
 
     public Player GetCurrentPlayer()
@@ -65,5 +63,10 @@ public class GameManager : MonoBehaviour
     public void AddUnit(GameObject unit)
     {
         units.Add(unit);
+    }
+
+    public void NextPhase()
+    {
+        Debug.Log(units.Count);
     }
 }

@@ -38,7 +38,7 @@ public class Player
             balance = balance - cost;
             //increment unit count of player
             amountOfUnits++;
-            Debug.Log(name + " balance reduced by: " + cost);
+            //Debug.Log(name + " balance reduced by: " + cost);
             return true;
         }
         return false;
