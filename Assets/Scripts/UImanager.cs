@@ -66,7 +66,7 @@ public class UImanager : MonoBehaviour
         switch (GameManager.instance.battleState)
         {
             case BattleState.REDSETUP:
-                if (!ConfigUnit.instance.redPlayer.CheckBalance(cost))
+                if (!GameManager.instance.redPlayer.CheckBalance(cost))
                 {
                     textCost.color = new Color(1, 0, 0, 255);
                 }
@@ -76,7 +76,7 @@ public class UImanager : MonoBehaviour
                 }
                 break;
             case BattleState.BLUESETUP:
-                if (!ConfigUnit.instance.bluePlayer.CheckBalance(cost))
+                if (!GameManager.instance.bluePlayer.CheckBalance(cost))
                 {
                     textCost.color = new Color(1, 0, 0, 255);
                 }

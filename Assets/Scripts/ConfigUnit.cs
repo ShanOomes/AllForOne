@@ -8,9 +8,6 @@ public class ConfigUnit : MonoBehaviour
     public static ConfigUnit instance { get; set; }
     public GameObject unit;
 
-    public Player redPlayer;
-    public Player bluePlayer;
-
     private Camera cam;
     private Ray ray;
 
@@ -38,13 +35,10 @@ public class ConfigUnit : MonoBehaviour
         placeAbleMask = LayerMask.GetMask("PlaceAble");
 
         UImanager.instance.selectionPanel.SetActive(true);
-        if (SetupBattle())
-        {
-            updateUI("title", "Turn: blue");
-            updateUI("balance", "100");
-            RandomizeSliders();
-            GameManager.instance.battleState = BattleState.BLUESETUP;
-        }
+        updateUI("title", "Turn: blue");
+        updateUI("balance", "100");
+        RandomizeSliders();
+        GameManager.instance.battleState = BattleState.BLUESETUP;
     }
 
     void Update()
@@ -61,13 +55,13 @@ public class ConfigUnit : MonoBehaviour
                         if (SetUnit(hit.point))
                         {
                             isPlacing = false;
-                            if (GameManager.instance.battleState == BattleState.BLUESETUP && redPlayer.Balance >= 10)
+                            if (GameManager.instance.battleState == BattleState.BLUESETUP && GameManager.instance.redPlayer.Balance >= 10)
                             {
                                 GameManager.instance.battleState = BattleState.REDSETUP;
                                 updateUI("title", "Turn: Red");
                                 StartCoroutine(ResetSetup());
                             }
-                            else if (GameManager.instance.battleState == BattleState.REDSETUP && bluePlayer.Balance >= 10)
+                            else if (GameManager.instance.battleState == BattleState.REDSETUP && GameManager.instance.bluePlayer.Balance >= 10)
                             {
                                 GameManager.instance.battleState = BattleState.BLUESETUP;
                                 updateUI("title", "Turn: blue");
@@ -107,33 +101,27 @@ public class ConfigUnit : MonoBehaviour
     public void ButtonClick()
     {
         UImanager manager = UImanager.instance;
+        GameManager gameManager = GameManager.instance;
         if(GameManager.instance.battleState == BattleState.BLUESETUP)
         {
-            if (bluePlayer.CheckBalance(manager.GetTotalCost()))
+            if (gameManager.bluePlayer.CheckBalance(manager.GetTotalCost()))
             {
-                bluePlayer.ReduceBalance(manager.GetTotalCost());
-                updateUI("balance", redPlayer.Balance.ToString());
+                gameManager.bluePlayer.ReduceBalance(manager.GetTotalCost());
+                updateUI("balance", gameManager.redPlayer.Balance.ToString());
                 manager.selectionPanel.SetActive(false);
                 isPlacing = true;
             }
         }
         else
         {
-            if (redPlayer.CheckBalance(manager.GetTotalCost()))
+            if (gameManager.redPlayer.CheckBalance(manager.GetTotalCost()))
             {
-                redPlayer.ReduceBalance(manager.GetTotalCost());
-                updateUI("balance", bluePlayer.Balance.ToString());
+                gameManager.redPlayer.ReduceBalance(manager.GetTotalCost());
+                updateUI("balance", gameManager.bluePlayer.Balance.ToString());
                 manager.selectionPanel.SetActive(false);
                 isPlacing = true;
             }
         }
-    }
-
-    bool SetupBattle()
-    {
-        redPlayer = new Player("Red");
-        bluePlayer = new Player("Blue");
-        return true;
     }
 
     private void updateUI(string action = "", string value = "")
