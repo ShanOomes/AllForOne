@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     public Player redPlayer;
     public Player bluePlayer;
 
+    private Player[] players;
+
     private void Awake()
     {
         if (instance == null)
@@ -30,6 +32,15 @@ public class GameManager : MonoBehaviour
     {
         redPlayer = new Player("Red");
         bluePlayer = new Player("Blue");
+
+
+        string[] names = { "Player one", "Player two" };
+        players = new Player[names.Length];
+
+        for (int i = 0; i < names.Length; i++)
+        {
+            players[i] = new Player(names[i]);
+        }
     }
 
     // Update is called once per frame

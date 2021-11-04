@@ -15,6 +15,14 @@ public class Player : MonoBehaviour
     public float Balance { get { return this.balance; } }
     public int amountUnits { get { return this.amountOfUnits; } }
 
+
+    //standard constructor
+    public Player()
+    {
+        this.name = "Default";
+        this.balance = 100f;
+    }
+
     //Custom constructor
     public Player(string name)
     {

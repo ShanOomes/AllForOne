@@ -87,7 +87,7 @@ public class UImanager : MonoBehaviour
                 break;
         }
     }
-
+    
     public int GetTotalCost()
     {
         return cost;
