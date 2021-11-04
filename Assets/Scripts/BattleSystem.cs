@@ -44,8 +44,10 @@ public class BattleSystem : MonoBehaviour
         UImanager.instance.selectionPanel.SetActive(true);
         if (SetupBattle())
         {
+            updateUI("title", "Turn: blue");
+            updateUI("balance", "100");
+            RandomizeSliders();
             battleState = BattleState.BLUESETUP;
-            UImanager.instance.highlight("blue");
         }
     }
 
@@ -53,9 +55,6 @@ public class BattleSystem : MonoBehaviour
     {
         redPlayer = new Player("Red");
         bluePlayer = new Player("Blue");
-
-        UImanager.instance.balanceRed.text = redPlayer.Balance.ToString();
-        UImanager.instance.balanceBlue.text = bluePlayer.Balance.ToString();
         return true;
     }
 
@@ -66,11 +65,11 @@ public class BattleSystem : MonoBehaviour
         switch (battleState)
         {
             case BattleState.BLUESETUP:
-                tmp.GetComponent<Unit>().SetValues(UImanager.instance.input.text, sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value, Team.Blue);
+                tmp.GetComponent<Unit>().SetValues(sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value, Team.Blue);
                 tmp.GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
                 break;
             case BattleState.REDSETUP:
-                tmp.GetComponent<Unit>().SetValues(UImanager.instance.input.text, sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value, Team.Red);
+                tmp.GetComponent<Unit>().SetValues(sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value, Team.Red);
                 tmp.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
                 break;
             default:
@@ -93,8 +92,8 @@ public class BattleSystem : MonoBehaviour
             if (bluePlayer.CheckBalance(manager.GetTotalCost()))
             {
                 bluePlayer.ReduceBalance(manager.GetTotalCost());
-                UImanager.instance.balanceBlue.text = bluePlayer.Balance.ToString();
-                UImanager.instance.selectionPanel.SetActive(false);
+                updateUI("balance", redPlayer.Balance.ToString());
+                manager.selectionPanel.SetActive(false);
                 isPlacing = true;
             }
         }
@@ -103,13 +102,26 @@ public class BattleSystem : MonoBehaviour
             if (redPlayer.CheckBalance(manager.GetTotalCost()))
             {
                 redPlayer.ReduceBalance(manager.GetTotalCost());
-                UImanager.instance.balanceRed.text = redPlayer.Balance.ToString();
-                UImanager.instance.selectionPanel.SetActive(false);
+                updateUI("balance", bluePlayer.Balance.ToString());
+                manager.selectionPanel.SetActive(false);
                 isPlacing = true;
             }
         }
     }
 
+    private void updateUI(string action = "", string value = "")
+    {
+        UImanager manager = UImanager.instance;
+        switch (action)
+        {
+            case "title":
+                manager.title.text = value;
+                break;
+            case "balance":
+                manager.balance.text = value;
+                break;
+        }
+    }
     // Update is called once per frame
     void Update()
     {
@@ -128,13 +140,13 @@ public class BattleSystem : MonoBehaviour
                             if (battleState == BattleState.BLUESETUP && redPlayer.Balance >= 10)
                             {
                                 battleState = BattleState.REDSETUP;
-                                UImanager.instance.highlight("red");
+                                updateUI("title", "Turn: Red");
                                 StartCoroutine(ResetSetup());
                             }
                             else if (battleState == BattleState.REDSETUP && bluePlayer.Balance >= 10)
                             {
                                 battleState = BattleState.BLUESETUP;
-                                UImanager.instance.highlight("blue");
+                                updateUI("title", "Turn: blue");
                                 StartCoroutine(ResetSetup());
                             }
                             else
@@ -151,11 +163,17 @@ public class BattleSystem : MonoBehaviour
     public IEnumerator ResetSetup()
     {
         yield return new WaitForSeconds(1f);
-        UImanager.instance.selectionPanel.SetActive(true);
-        UImanager.instance.textCost.color = new Color(255, 255, 255, 1);
-        for (int i = 0; i < UImanager.instance.listSliders.Count; i++)
-        {
-            UImanager.instance.listSliders[i].value = 0;
-        }
+        UImanager manager = UImanager.instance;
+        manager.selectionPanel.SetActive(true);
+        manager.textCost.color = new Color(255, 255, 255, 1);
+        RandomizeSliders();
     }
+
+    public void RandomizeSliders(){
+        UImanager manager = UImanager.instance;
+        for (int i = 0; i < manager.listSliders.Count; i++)
+        {
+            manager.listSliders[i].value = Random.Range(1, 100);
+        }
+    }   
 }

@@ -8,13 +8,8 @@ public class UImanager : MonoBehaviour
 
     public static UImanager instance { get; set; }
 
-    public TextMeshProUGUI balanceBlue;
-    public TextMeshProUGUI balanceRed;
-
-    public GameObject playerBlue;
-    public GameObject playerRed;
-
-    public TMP_InputField input;
+    public TextMeshProUGUI title;
+    public TextMeshProUGUI balance;
 
     [Header("Slider Values")]
     public List<TextMeshProUGUI> listValues;
@@ -42,7 +37,7 @@ public class UImanager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        UpdateSliderValues();
+        //UpdateSliderValues();
     }
 
     public void SliderOnchange()
@@ -107,26 +102,6 @@ public class UImanager : MonoBehaviour
     public List<Slider> GetValues()
     {
         return listSliders;
-    }
-
-    public void highlight(string player)
-    {
-        if(player == "blue")
-        {
-            playerBlue.SetActive(true);
-            playerRed.SetActive(false);
-        }
-
-        if(player == "red")
-        {
-            playerRed.SetActive(true);
-            playerBlue.SetActive(false);
-        }
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     float map(float s, float a1, float a2, float b1, float b2)

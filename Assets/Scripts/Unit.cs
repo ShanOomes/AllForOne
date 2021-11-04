@@ -44,9 +44,8 @@ public class Unit : MonoBehaviour
         this.team = team;
     }
 
-    public void SetValues(string name, float health, float strength, float speed, float defense, Team team)
+    public void SetValues(float health, float strength, float speed, float defense, Team team)
     {
-        this.name = name;
         this.health = health;
         this.strength = strength;
         this.speed = speed;
