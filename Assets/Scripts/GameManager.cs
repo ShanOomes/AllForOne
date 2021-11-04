@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        string[] names = { "Player one", "Player two" };
+        string[] names = { "Blue", "Red" };
         players = new Player[names.Length];
 
         for (int i = 0; i < names.Length; i++)
@@ -39,8 +39,8 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(players[0].Name + " " + players[0].Balance);
-        Debug.Log(players[1].Name + " " + players[1].Balance);
+        //Debug.Log(players[0].Name + " " + players[0].Balance);
+        //Debug.Log(players[1].Name + " " + players[1].Balance);
     }
 
     public Player GetCurrentPlayer()
@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
     public void NextPlayer()
     {
         cp++;
+
         if (cp >= players.Length)
         {
             cp = 0;

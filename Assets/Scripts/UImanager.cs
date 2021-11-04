@@ -37,7 +37,7 @@ public class UImanager : MonoBehaviour
     public void SliderOnchange()
     {
         UpdateSliderValues();
-        UpdateText();
+        UpdateTextCost();
     }
 
     private void UpdateSliderValues()
@@ -61,35 +61,10 @@ public class UImanager : MonoBehaviour
         textCost.text = cost.ToString();
     }
 
-    private void UpdateText()
+    private void UpdateTextCost()
     {
-        /*
-        switch (GameManager.instance.battleState)
-        {
-            case BattleState.REDSETUP:
-                if (!GameManager.instance.redPlayer.CheckBalance(cost))
-                {
-                    textCost.color = new Color(1, 0, 0, 255);
-                }
-                else
-                {
-                    textCost.color = new Color(255, 255, 255, 255);
-                }
-                break;
-            case BattleState.BLUESETUP:
-                if (!GameManager.instance.bluePlayer.CheckBalance(cost))
-                {
-                    textCost.color = new Color(1, 0, 0, 255);
-                }
-                else
-                {
-                    textCost.color = new Color(255, 255, 255, 255);
-                }
-                break;
-        }*/
-
         Player cp = GameManager.instance.GetCurrentPlayer();
-        if(!cp.CheckBalance(cost))
+        if(cp.CheckBalance(cost))
         {
             textCost.color = new Color(255, 255, 255, 255);
         }
@@ -97,6 +72,14 @@ public class UImanager : MonoBehaviour
         {
             textCost.color = new Color(1, 0, 0, 255);
         }
+    }
+
+    public void UpdateUI()
+    {
+        Player cp = GameManager.instance.GetCurrentPlayer();
+
+        title.text = cp.Name;
+        balance.text = cp.Balance.ToString();
     }
     
     public int GetTotalCost()

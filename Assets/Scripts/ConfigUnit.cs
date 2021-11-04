@@ -28,20 +28,15 @@ public class ConfigUnit : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
     public void StartConfig()
     {
         cam = Camera.main;
         placeAbleMask = LayerMask.GetMask("PlaceAble");
 
         UImanager.instance.selectionPanel.SetActive(true);
-        updateUI("title", GameManager.instance.GetCurrentPlayer().Name);
-        updateUI("balance", GameManager.instance.GetCurrentPlayer().Balance.ToString());
+
+        //Set UI for start of game
+        UImanager.instance.UpdateUI();
         RandomizeSliders();
     }
 
@@ -59,27 +54,7 @@ public class ConfigUnit : MonoBehaviour
                         if (SetUnit(hit.point))
                         {
                             isPlacing = false;
-                            /*if (GameManager.instance.battleState == BattleState.BLUESETUP && GameManager.instance.redPlayer.Balance >= 10)
-                            {
-                                GameManager.instance.battleState = BattleState.REDSETUP;
-                                updateUI("title", "Turn: Red");
-                                StartCoroutine(ResetSetup());
-                            }
-                            else if (GameManager.instance.battleState == BattleState.REDSETUP && GameManager.instance.bluePlayer.Balance >= 10)
-                            {
-                                GameManager.instance.battleState = BattleState.BLUESETUP;
-                                updateUI("title", "Turn: blue");
-                                StartCoroutine(ResetSetup());
-                            }
-                            else
-                            {
-                                print("Start of the game");
-                            }*/
-                            if(GameManager.instance.GetCurrentPlayer().Balance >= 10)
-                            {
-                                updateUI("title", "Turn: " + GameManager.instance.GetCurrentPlayer().Name);
-                                StartCoroutine(ResetSetup());
-                            }
+                            StartCoroutine(ResetSetup());//Restart for the next player
                         }
                     }
                 }
@@ -91,19 +66,6 @@ public class ConfigUnit : MonoBehaviour
     {
         GameObject tmp = Instantiate(unit, pos, Quaternion.identity);
         List<Slider> sliders = UImanager.instance.GetValues();
-        /*switch (GameManager.instance.battleState)
-        {
-            case BattleState.BLUESETUP:
-                tmp.GetComponent<Unit>().SetValues(sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value, Team.Blue);
-                tmp.GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
-                break;
-            case BattleState.REDSETUP:
-                tmp.GetComponent<Unit>().SetValues(sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value, Team.Red);
-                tmp.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
-                break;
-            default:
-                break;
-        }*/
 
         tmp.GetComponent<Unit>().SetValues(sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value, GameManager.instance.GetCurrentPlayer().Name);
         return true;
@@ -111,58 +73,26 @@ public class ConfigUnit : MonoBehaviour
 
     public void ButtonClick()
     {
-        UImanager manager = UImanager.instance;
+        UImanager UImanager = UImanager.instance;
         GameManager gameManager = GameManager.instance;
-        /*if(GameManager.instance.battleState == BattleState.BLUESETUP)
-        {
-            if (gameManager.bluePlayer.CheckBalance(manager.GetTotalCost()))
-            {
-                gameManager.bluePlayer.ReduceBalance(manager.GetTotalCost());
-                updateUI("balance", gameManager.redPlayer.Balance.ToString());
-                manager.selectionPanel.SetActive(false);
-                isPlacing = true;
-            }
-        }
-        else
-        {
-            if (gameManager.redPlayer.CheckBalance(manager.GetTotalCost()))
-            {
-                gameManager.redPlayer.ReduceBalance(manager.GetTotalCost());
-                updateUI("balance", gameManager.bluePlayer.Balance.ToString());
-                manager.selectionPanel.SetActive(false);
-                isPlacing = true;
-            }
-        }*/
-        if (gameManager.GetCurrentPlayer().CheckBalance(manager.GetTotalCost()))
-        {
-            gameManager.NextPlayer();
-            gameManager.GetCurrentPlayer().ReduceBalance(manager.GetTotalCost());
-            updateUI("balance", gameManager.GetCurrentPlayer().Balance.ToString());
-            manager.selectionPanel.SetActive(false);
-            isPlacing = true;
-        }
-    }
 
-    private void updateUI(string action = "", string value = "")
-    {
-        UImanager manager = UImanager.instance;
-        switch (action)
+        if (gameManager.GetCurrentPlayer().ReduceBalance(UImanager.GetTotalCost()))
         {
-            case "title":
-                manager.title.text = value;
-                break;
-            case "balance":
-                manager.balance.text = value;
-                break;
+            UImanager.selectionPanel.SetActive(false);
+            isPlacing = true;
         }
     }
 
     public IEnumerator ResetSetup()
     {
+        Debug.Log("Reset called!");
         yield return new WaitForSeconds(1f);
-        UImanager manager = UImanager.instance;
-        manager.selectionPanel.SetActive(true);
-        manager.textCost.color = new Color(255, 255, 255, 1);
+        UImanager UImanager = UImanager.instance;
+        UImanager.selectionPanel.SetActive(true);
+        UImanager.textCost.color = new Color(255, 255, 255, 1);
+
+        GameManager.instance.NextPlayer();
+        UImanager.UpdateUI();
         RandomizeSliders();
     }
 

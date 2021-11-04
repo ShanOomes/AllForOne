@@ -30,22 +30,35 @@ public class Player
         this.balance = 100f;
     }
 
-    public bool CheckBalance(int cost)
+    public bool ReduceBalance(int cost)//Reduce balance of player
     {
         //Check if balance is within 
-        if((balance - cost) >= 0 && cost >= 10)
+        if ((balance - cost) >= 0 && cost >= 10)
+        {
+            balance = balance - cost;
+            //increment unit count of player
+            amountOfUnits++;
+            Debug.Log(name + " balance reduced by: " + cost);
+            return true;
+        }
+        return false;
+    }
+
+    public bool CheckBalance(int cost)
+    {
+        if ((balance - cost) >= 0 && cost >= 10)
         {
             return true;
         }
         return false;
     }
 
-    public void ReduceBalance(int cost)
+    public bool HasEnough()
     {
-        //Reduce balance of player
-        balance = balance - cost;
-
-        //increment unit count of player
-        amountOfUnits++;
+        if(balance >= 10)
+        {
+            return true;
+        }
+        return false;
     }
 }
