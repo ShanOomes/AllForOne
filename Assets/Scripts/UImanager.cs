@@ -34,12 +34,6 @@ public class UImanager : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        //UpdateSliderValues();
-    }
-
     public void SliderOnchange()
     {
         UpdateSliderValues();
@@ -69,10 +63,10 @@ public class UImanager : MonoBehaviour
 
     private void UpdateText()
     {
-        switch (BattleSystem.instance.battleState)
+        switch (GameManager.instance.battleState)
         {
             case BattleState.REDSETUP:
-                if (!BattleSystem.instance.redPlayer.CheckBalance(cost))
+                if (!ConfigUnit.instance.redPlayer.CheckBalance(cost))
                 {
                     textCost.color = new Color(1, 0, 0, 255);
                 }
@@ -82,7 +76,7 @@ public class UImanager : MonoBehaviour
                 }
                 break;
             case BattleState.BLUESETUP:
-                if (!BattleSystem.instance.bluePlayer.CheckBalance(cost))
+                if (!ConfigUnit.instance.bluePlayer.CheckBalance(cost))
                 {
                     textCost.color = new Color(1, 0, 0, 255);
                 }

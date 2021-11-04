@@ -340,7 +340,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 628685841}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BattleSystem, Assembly-CSharp
         m_MethodName: ButtonClick
         m_Mode: 1
@@ -1020,11 +1020,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 628685840}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cfcc3d56f3088a41a9814b701769750, type: 3}
+  m_Script: {fileID: 11500000, guid: 6bf884b226481a848b26bee99d856ca9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   unit: {fileID: 5755429618058749375, guid: 89cefc056c42dbc48825036974926793, type: 3}
-  battleState: 0
   redPlayer: {fileID: 0}
   bluePlayer: {fileID: 0}
 --- !u!114 &628685842
@@ -1039,6 +1038,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17928e081408a2b4bbf946c389991b35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battleState: 0
 --- !u!4 &628685843
 Transform:
   m_ObjectHideFlags: 0

@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum BattleState { START, BLUETURN, REDTURN, REDSETUP, BLUESETUP, WON, LOST }
 public class GameManager : MonoBehaviour
 {
 
     public static GameManager instance { get; set; }
+    public BattleState battleState;
 
     private void Awake()
     {
