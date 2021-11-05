@@ -35,11 +35,6 @@ public class GameManager : MonoBehaviour
         ConfigUnit.instance.StartConfig();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
     public Player GetCurrentPlayer()
     {   
         return players[cp];
