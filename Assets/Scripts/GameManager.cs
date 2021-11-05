@@ -35,17 +35,17 @@ public class GameManager : MonoBehaviour
         ConfigUnit.instance.StartConfig();
     }
 
-    public Player GetCurrentPlayer()
+    public Player GetCurrentPlayer()//Returns the current player
     {   
         return players[cp];
     }
 
-    public Player GetSpecificPlayer(int index)
+    public Player GetSpecificPlayer(int index)//Returns specific player based on index
     {
         return players[index];
     }
 
-    public void NextPlayer()
+    public void NextPlayer()//Iterate through array of players
     {
         cp++;
 
@@ -55,12 +55,12 @@ public class GameManager : MonoBehaviour
         }   
     }
 
-    public void AddUnit(GameObject unit)
+    public void AddUnit(GameObject unit)//Add unit to global list of units created by players
     {
         units.Add(unit);
     }
 
-    public void NextPhase()
+    public void NextPhase()//Called when every player has created their units and have no balance left
     {
         Debug.Log(units.Count);
     }

@@ -35,13 +35,13 @@ public class UImanager : MonoBehaviour
         }
     }
 
-    public void SliderOnchange()
+    public void SliderOnchange()//Called when slider value changed
     {
         UpdateSliderValues();
         UpdateTextCost();
     }
 
-    private void UpdateSliderValues()
+    private void UpdateSliderValues()//Calculates the pricing of every slider and sum it up
     {
         int value = 0;
         for (int i = 0; i < listSliders.Count; i++)
@@ -62,7 +62,7 @@ public class UImanager : MonoBehaviour
         textCost.text = cost.ToString();
     }
 
-    private void UpdateTextCost()
+    private void UpdateTextCost()//Updates the cost text in the UI, if the player has enough balance left
     {
         Player cp = GameManager.instance.GetCurrentPlayer();
         if(cp.CheckBalance(cost))
@@ -75,7 +75,7 @@ public class UImanager : MonoBehaviour
         }
     }
 
-    public void UpdateUI()
+    public void UpdateUI()//Update UI when a new player is selected
     {
         Player cp = GameManager.instance.GetCurrentPlayer();
 
@@ -83,14 +83,32 @@ public class UImanager : MonoBehaviour
         balance.text = cp.Balance.ToString();
     }
     
-    public int GetTotalCost()
+    public int GetTotalCost()//Return the total cost
     {
         return cost;
     }
 
-    public List<Slider> GetValues()
+    public List<Slider> GetValues()//Return list of sliders
     {
         return listSliders;
+    }
+
+    public void RandomizeSliders()//Randomize the config sliders
+    {
+        for (int i = 0; i < listSliders.Count; i++)
+        {
+            listSliders[i].value = Random.Range(1, 100);
+        }
+    }
+
+    public IEnumerator ResetSetup()//Reset of the Config UI panel
+    {
+        yield return new WaitForSeconds(1f);
+        selectionPanel.SetActive(true);
+        textCost.color = new Color(255, 255, 255, 1);
+
+        UpdateUI();
+        RandomizeSliders();
     }
 
     float map(float s, float a1, float a2, float b1, float b2)

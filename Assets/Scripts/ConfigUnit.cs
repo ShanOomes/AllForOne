@@ -28,7 +28,7 @@ public class ConfigUnit : MonoBehaviour
         }
     }
 
-    public void StartConfig()
+    public void StartConfig()//Init the config phase of the game
     {
         cam = Camera.main;
         placeAbleMask = LayerMask.GetMask("PlaceAble");
@@ -37,31 +37,31 @@ public class ConfigUnit : MonoBehaviour
 
         //Set UI for start of game
         UImanager.instance.UpdateUI();
-        RandomizeSliders();
+        UImanager.instance.RandomizeSliders();
     }
 
     void Update()
     {
-        if (isPlacing)
+        if (isPlacing)//check if player can place his created unit
         {
             ray = cam.ScreenPointToRay(Input.mousePosition);
             if (Input.GetMouseButtonDown(0))
             {
-                if (Physics.Raycast(ray, out RaycastHit hit, 100.0f, placeAbleMask))
+                if (Physics.Raycast(ray, out RaycastHit hit, 100.0f, placeAbleMask))//Raycasting for placing the unit
                 {
                     if (hit.collider != null)
                     {
                         if (SetUnit(hit.point))
                         {
                             isPlacing = false;
-                            GameManager.instance.NextPlayer();
-                            if (GameManager.instance.GetCurrentPlayer().HasEnough())
+                            GameManager.instance.NextPlayer();//Moves to next player
+                            if (GameManager.instance.GetCurrentPlayer().HasEnough())//Check if next player has balance left
                             {
-                                StartCoroutine(ResetSetup());//Restart for the next player
+                                StartCoroutine(UImanager.instance.ResetSetup());//Next plapyer can configure their unit
                             }
                             else
                             {
-                                Debug.Log("Nobody has money left, start next phase of game");
+                                Debug.Log("Nobody has money left, start next phase of game");//Every player has no balance left
                             }
                         }
                     }
@@ -70,7 +70,7 @@ public class ConfigUnit : MonoBehaviour
         }
     }
 
-    bool SetUnit(Vector3 pos)
+    bool SetUnit(Vector3 pos)//Create and apply the UI sliders to the created unit
     {
         GameObject tmp = Instantiate(unit, pos, Quaternion.identity);
         List<Slider> sliders = UImanager.instance.GetValues();
@@ -81,7 +81,7 @@ public class ConfigUnit : MonoBehaviour
         return true;
     }
 
-    public void ButtonClick()
+    public void ButtonClick()//Button to confirm the configuration of the unit
     {
         UImanager UImanager = UImanager.instance;
         GameManager gameManager = GameManager.instance;
@@ -92,23 +92,4 @@ public class ConfigUnit : MonoBehaviour
             isPlacing = true;
         }
     }
-
-    public IEnumerator ResetSetup()
-    {
-        yield return new WaitForSeconds(1f);
-        UImanager UImanager = UImanager.instance;
-        UImanager.selectionPanel.SetActive(true);
-        UImanager.textCost.color = new Color(255, 255, 255, 1);
-
-        UImanager.UpdateUI();
-        RandomizeSliders();
-    }
-
-    public void RandomizeSliders(){
-        UImanager manager = UImanager.instance;
-        for (int i = 0; i < manager.listSliders.Count; i++)
-        {
-            manager.listSliders[i].value = Random.Range(1, 100);
-        }
-    } 
 }
