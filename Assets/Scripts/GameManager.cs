@@ -25,11 +25,14 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         string[] names = { "Blue", "Red" };
+        Color[] colors = { Color.blue, Color.red };
+
         players = new Player[names.Length];
 
         for (int i = 0; i < names.Length; i++)
         {
             players[i] = new Player(names[i]);
+            players[i].UnitColor = colors[i];
         }
 
         ConfigUnit.instance.StartConfig();
@@ -62,6 +65,7 @@ public class GameManager : MonoBehaviour
 
     public void NextPhase()//Called when every player has created their units and have no balance left
     {
-        Debug.Log(units.Count);
+        cp = 0;
+        BattleSystem.instance.StartConfig();
     }
 }

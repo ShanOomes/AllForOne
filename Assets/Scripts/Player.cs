@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class Player
 {
-    public string name;
+    private string name;
 
-    public float balance;
+    private float balance;
 
     private int amountOfUnits;
+
+    private Color unitColor;
 
     //Properties
     public string Name { get { return this.name; } set { this.name = value; } }
     public float Balance { get { return this.balance; } }
     public int amountUnits { get { return this.amountOfUnits; } }
+
+    public Color UnitColor { get { return this.unitColor; } set { this.unitColor = value; } }
 
 
     //standard constructor
