@@ -24,8 +24,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        string[] names = { "Blue", "Red" };
-        Color[] colors = { Color.blue, Color.red };
+        string[] names = { "Blue", "Red", "Yellow" };
+        Color[] colors = { Color.blue, Color.red, Color.yellow };
 
         players = new Player[names.Length];
 

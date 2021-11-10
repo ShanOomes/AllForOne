@@ -13,7 +13,11 @@ public class BattleSystem : MonoBehaviour
     private Ray ray;
     private int unitMask;
 
-    public CinemachineVirtualCamera virtualCamera;
+    private GameObject currentUnit;
+    [SerializeField] CinemachineVirtualCamera cam_unit;
+    [SerializeField] CinemachineVirtualCamera cam_overview;
+
+    private bool overworldcam = true;
     private void Awake()
     {
         if (instance == null)
@@ -43,13 +47,18 @@ public class BattleSystem : MonoBehaviour
             {
                 if (hit.collider != null)
                 {
-                    if(hit.collider.gameObject.GetComponent<Unit>().Team == GameManager.instance.GetCurrentPlayer().Name)
+                    GameObject tmp = hit.collider.gameObject;
+                    if(tmp.GetComponent<Unit>().Team == GameManager.instance.GetCurrentPlayer().Name)
                     {
                         Debug.Log("Playable unit");
                         if(Input.GetMouseButtonDown(0))
                         {
-                            hit.collider.gameObject.GetComponent<PlayerInput>().enabled = true;
-                            virtualCamera.Follow = hit.collider.gameObject.transform.GetChild(0);
+                            tmp.GetComponent<PlayerInput>().enabled = true;//Enable the player input
+                            cam_unit.Follow = tmp.transform.GetChild(0);
+                            currentUnit = tmp;
+                            SwitchPriority();
+
+                            StartCoroutine(StartCountdown());
                         }
                     }
                     else
@@ -61,4 +70,30 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
+    private void SwitchPriority(){
+        if(overworldcam) {
+            cam_overview.Priority = 0;
+            cam_unit.Priority = 1;
+        }else{
+            cam_overview.Priority = 1;
+            cam_unit.Priority = 0;
+        }
+        overworldcam = !overworldcam;
+    }
+
+    public IEnumerator StartCountdown(float countdownValue = 10)
+    {
+        float currCountdownValue;
+        currCountdownValue = countdownValue;
+        while (currCountdownValue > 0)
+        {
+            Debug.Log("Countdown: " + currCountdownValue);
+            yield return new WaitForSeconds(1.0f);
+            currCountdownValue--;
+        }
+
+        SwitchPriority();
+        currentUnit.GetComponent<PlayerInput>().enabled = false;
+        GameManager.instance.NextPlayer();
+    }
 }

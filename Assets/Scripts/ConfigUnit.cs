@@ -15,6 +15,7 @@ public class ConfigUnit : MonoBehaviour
 
     private bool isPlacing = false;
 
+
     private void Awake()
     {
         if (instance == null)
