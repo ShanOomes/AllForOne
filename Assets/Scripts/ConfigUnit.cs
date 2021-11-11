@@ -14,8 +14,6 @@ public class ConfigUnit : MonoBehaviour
     private int placeAbleMask;
 
     private bool isPlacing = false;
-
-
     private void Awake()
     {
         if (instance == null)
@@ -79,7 +77,6 @@ public class ConfigUnit : MonoBehaviour
         List<Slider> sliders = UImanager.instance.GetValues();
 
         tmp.GetComponent<Unit>().SetValues(sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value, GameManager.instance.GetCurrentPlayer().Name);//Set stats of created unit
-        //tmp.GetComponent<Renderer>().material.SetColor("_Color", GameManager.instance.GetCurrentPlayer().UnitColor);
         tmp.transform.GetChild(1).GetChild(0).GetComponent<Renderer>().material.SetColor("_Color", GameManager.instance.GetCurrentPlayer().UnitColor);
         GameManager.instance.AddUnit(tmp);//Add created unit to global list of units
         return true;

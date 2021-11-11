@@ -21,6 +21,7 @@ public class UImanager : MonoBehaviour
 
     public TextMeshProUGUI textCost;
 
+    public bool debugMode = false;
     private int cost;
     private void Awake()
     {
@@ -95,9 +96,19 @@ public class UImanager : MonoBehaviour
 
     public void RandomizeSliders()//Randomize the config sliders
     {
-        for (int i = 0; i < listSliders.Count; i++)
+        if(!debugMode)
         {
-            listSliders[i].value = Random.Range(1, 100);
+            for (int i = 0; i < listSliders.Count; i++)
+            {
+                listSliders[i].value = Random.Range(1, 100);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < listSliders.Count; i++)
+            {
+                listSliders[i].value = 100;
+            }
         }
     }
 

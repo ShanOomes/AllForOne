@@ -17,7 +17,6 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] CinemachineVirtualCamera cam_unit;
     [SerializeField] CinemachineVirtualCamera cam_overview;
 
-    private bool overworldcam = true;
     private void Awake()
     {
         if (instance == null)
@@ -36,6 +35,10 @@ public class BattleSystem : MonoBehaviour
         isActive = true;
         cam = Camera.main;
         unitMask = LayerMask.GetMask("Unit");
+
+        //Register camera's
+        CameraSwitcher.AddCamera(cam_overview);
+        CameraSwitcher.AddCamera(cam_unit);
     }
 
     private void Update()
@@ -56,7 +59,8 @@ public class BattleSystem : MonoBehaviour
                             tmp.GetComponent<PlayerInput>().enabled = true;//Enable the player input
                             cam_unit.Follow = tmp.transform.GetChild(0);
                             currentUnit = tmp;
-                            SwitchPriority();
+
+                            CameraSwitcher.SwitchCamera(cam_unit);
 
                             StartCoroutine(StartCountdown());
                         }
@@ -70,17 +74,6 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    private void SwitchPriority(){
-        if(overworldcam) {
-            cam_overview.Priority = 0;
-            cam_unit.Priority = 1;
-        }else{
-            cam_overview.Priority = 1;
-            cam_unit.Priority = 0;
-        }
-        overworldcam = !overworldcam;
-    }
-
     public IEnumerator StartCountdown(float countdownValue = 10)
     {
         float currCountdownValue;
@@ -92,7 +85,7 @@ public class BattleSystem : MonoBehaviour
             currCountdownValue--;
         }
 
-        SwitchPriority();
+        CameraSwitcher.SwitchCamera(cam_overview);
         currentUnit.GetComponent<PlayerInput>().enabled = false;
         GameManager.instance.NextPlayer();
     }
