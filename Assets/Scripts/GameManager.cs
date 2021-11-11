@@ -68,4 +68,12 @@ public class GameManager : MonoBehaviour
         cp = 0;
         BattleSystem.instance.StartConfig();
     }
+
+    public void VisualizeUnits(bool state)//Visualize all units created by players
+    {
+        for (int i = 0; i < units.Count; i++)
+        {
+            units[i].transform.GetChild(3).gameObject.SetActive(state);
+        }
+    }
 }

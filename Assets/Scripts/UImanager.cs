@@ -21,6 +21,13 @@ public class UImanager : MonoBehaviour
 
     public TextMeshProUGUI textCost;
 
+    [Header("Loading bar")]
+    public GameObject progressBar;
+    private float currentTime;
+    public Image loadingBar;
+    public TextMeshProUGUI durationText;
+
+
     public bool debugMode = false;
     private int cost;
     private void Awake()
@@ -34,6 +41,8 @@ public class UImanager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        loadingBar = progressBar.transform.GetChild(0).GetComponent<Image>();
     }
 
     public void SliderOnchange()//Called when slider value changed
@@ -125,5 +134,19 @@ public class UImanager : MonoBehaviour
     float map(float s, float a1, float a2, float b1, float b2)
     {
         return b1 + (s - a1) * (b2 - b1) / (a2 - a1);
+    }
+
+    private IEnumerator Timer(float duration)
+    {
+        progressBar.SetActive(true);
+        currentTime = duration;
+        while(currentTime > 0)
+        {
+            currentTime -= Time.deltaTime;
+            loadingBar.fillAmount = currentTime / duration;
+            durationText.text = currentTime.ToString("F0");
+            yield return null;
+        }
+        progressBar.SetActive(false);
     }
 }

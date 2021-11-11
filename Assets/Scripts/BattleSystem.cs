@@ -39,6 +39,8 @@ public class BattleSystem : MonoBehaviour
         //Register camera's
         CameraSwitcher.AddCamera(cam_overview);
         CameraSwitcher.AddCamera(cam_unit);
+
+        GameManager.instance.VisualizeUnits(true);
     }
 
     private void Update()
@@ -76,15 +78,21 @@ public class BattleSystem : MonoBehaviour
 
     public IEnumerator StartCountdown(float countdownValue = 10)
     {
-        float currCountdownValue;
-        currCountdownValue = countdownValue;
-        while (currCountdownValue > 0)
+        float currentTime;
+        currentTime = countdownValue;
+        yield return new WaitForSeconds(0.3f);
+        GameManager.instance.VisualizeUnits(false);
+        yield return new WaitForSeconds(2f);
+        UImanager.instance.progressBar.SetActive(true);
+        while (currentTime > 0)
         {
-            Debug.Log("Countdown: " + currCountdownValue);
-            yield return new WaitForSeconds(1.0f);
-            currCountdownValue--;
+            currentTime -= Time.deltaTime;
+            UImanager.instance.loadingBar.fillAmount = currentTime / countdownValue;
+            UImanager.instance.durationText.text = currentTime.ToString("F0");
+            yield return null;
         }
-
+        GameManager.instance.VisualizeUnits(true);
+        UImanager.instance.progressBar.SetActive(false);
         CameraSwitcher.SwitchCamera(cam_overview);
         currentUnit.GetComponent<PlayerInput>().enabled = false;
         GameManager.instance.NextPlayer();
