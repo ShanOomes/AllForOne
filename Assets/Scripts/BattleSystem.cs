@@ -91,10 +91,11 @@ public class BattleSystem : MonoBehaviour
             UImanager.instance.durationText.text = currentTime.ToString("F0");
             yield return null;
         }
-        GameManager.instance.VisualizeUnits(true);
+
         UImanager.instance.progressBar.SetActive(false);
         CameraSwitcher.SwitchCamera(cam_overview);
         currentUnit.GetComponent<PlayerInput>().enabled = false;
         GameManager.instance.NextPlayer();
+        GameManager.instance.VisualizeUnits(true);
     }
 }

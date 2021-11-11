@@ -3904,7 +3904,7 @@ MonoBehaviour:
   progressBar: {fileID: 1266302420}
   loadingBar: {fileID: 0}
   durationText: {fileID: 170691085}
-  debugMode: 1
+  debugMode: 0
 --- !u!4 &1926628002
 Transform:
   m_ObjectHideFlags: 0

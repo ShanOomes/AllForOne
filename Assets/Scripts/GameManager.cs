@@ -73,7 +73,10 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < units.Count; i++)
         {
-            units[i].transform.GetChild(3).gameObject.SetActive(state);
+            if(units[i].GetComponent<Unit>().Team == GetCurrentPlayer().Name)
+            {
+                units[i].transform.GetChild(3).gameObject.SetActive(state);
+            }
         }
     }
 }
