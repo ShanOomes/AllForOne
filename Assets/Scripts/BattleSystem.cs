@@ -63,7 +63,7 @@ public class BattleSystem : MonoBehaviour
                             currentUnit = tmp;
 
                             CameraSwitcher.SwitchCamera(cam_unit);
-
+                            UImanager.instance.Tunnels(1f);
                             StartCoroutine(StartCountdown());
                         }
                     }
@@ -94,6 +94,7 @@ public class BattleSystem : MonoBehaviour
         }
 
         UImanager.instance.progressBar.SetActive(false);
+        UImanager.instance.Tunnels(0.5f);
         CameraSwitcher.SwitchCamera(cam_overview);
         GameManager.instance.CheckUnits();//Kill all units that dont have a roof
         currentUnit.GetComponent<PlayerInput>().enabled = false;

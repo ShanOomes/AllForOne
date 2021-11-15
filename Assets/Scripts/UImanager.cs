@@ -27,7 +27,7 @@ public class UImanager : MonoBehaviour
     public Image loadingBar;
     public TextMeshProUGUI durationText;
 
-
+    public GameObject[] tunnels = new GameObject[3];
     public bool debugMode = false;
     private int cost;
     private void Awake()
@@ -148,5 +148,25 @@ public class UImanager : MonoBehaviour
             yield return null;
         }
         progressBar.SetActive(false);
+    }
+
+    public void Tunnels(float alpha)
+    {
+        for (int i = 0; i < tunnels.Length; i++)
+        {
+            ChangeAlpha(tunnels[i].GetComponent<Renderer>().material, alpha);
+        }
+    }
+
+    private void ChangeAlpha(Material mat, float alpha)
+    {
+        Color oldColor = mat.color;
+        Color newColor = new Color(oldColor.r, oldColor.g, oldColor.b, alpha);
+        mat.SetColor("_Color", newColor);
+        mat.SetFloat("_Mode", 3);
+        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        mat.EnableKeyword("_ALPHABLEND_ON");
+        mat.renderQueue = 3000;
     }
 }

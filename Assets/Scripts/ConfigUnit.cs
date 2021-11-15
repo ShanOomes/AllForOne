@@ -37,6 +37,8 @@ public class ConfigUnit : MonoBehaviour
         //Set UI for start of game
         UImanager.instance.UpdateUI();
         UImanager.instance.RandomizeSliders();
+
+        UImanager.instance.Tunnels(0.5f);
     }
 
     void Update()
