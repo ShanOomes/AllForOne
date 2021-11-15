@@ -55,7 +55,7 @@ public class BattleSystem : MonoBehaviour
                     GameObject tmp = hit.collider.gameObject;
                     if(tmp.GetComponent<Unit>().Team == GameManager.instance.GetCurrentPlayer().Name)
                     {
-                        Debug.Log("Playable unit");
+                        //Debug.Log("Playable unit");
                         if(Input.GetMouseButtonDown(0))
                         {
                             tmp.GetComponent<PlayerInput>().enabled = true;//Enable the player input
@@ -69,7 +69,7 @@ public class BattleSystem : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("Not playable unit");
+                        //Debug.Log("Not playable unit");
                     }
                 }
             }
@@ -80,6 +80,7 @@ public class BattleSystem : MonoBehaviour
     {
         float currentTime;
         currentTime = countdownValue;
+        GameManager.instance.SpawnPowerup();
         yield return new WaitForSeconds(0.3f);
         GameManager.instance.VisualizeUnits(false);
         yield return new WaitForSeconds(2f);
@@ -94,6 +95,7 @@ public class BattleSystem : MonoBehaviour
 
         UImanager.instance.progressBar.SetActive(false);
         CameraSwitcher.SwitchCamera(cam_overview);
+        GameManager.instance.CheckUnits();//Kill all units that dont have a roof
         currentUnit.GetComponent<PlayerInput>().enabled = false;
         GameManager.instance.NextPlayer();
         GameManager.instance.VisualizeUnits(true);

@@ -13,6 +13,8 @@ public class Unit : MonoBehaviour
 
     public string team;
 
+    private int roofMask;
+
     //Properties
     public string Name { get { return this.name; } set { this.name  = value; } }
 
@@ -50,5 +52,22 @@ public class Unit : MonoBehaviour
         this.speed = speed;
         this.defense = defense;
         this.team = team;
+    }
+
+    public bool CheckRoof(){
+        RaycastHit hit;
+        roofMask = LayerMask.GetMask("Roof");
+        // Does the ray intersect any objects excluding the player layer
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.up), out hit, Mathf.Infinity, roofMask))
+        {
+            Debug.Log(hit.collider.gameObject.name);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public void Update(){
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.up) * 1000, Color.red);
     }
 }

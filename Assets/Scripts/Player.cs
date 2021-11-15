@@ -12,6 +12,8 @@ public class Player
 
     private Color unitColor;
 
+    private List<PowerUp> powerUps = new List<PowerUp>();
+
     //Properties
     public string Name { get { return this.name; } set { this.name = value; } }
     public float Balance { get { return this.balance; } }
@@ -19,7 +21,7 @@ public class Player
 
     public Color UnitColor { get { return this.unitColor; } set { this.unitColor = value; } }
 
-
+    public List<PowerUp> PowerUps { get { return this.powerUps; } }
     //standard constructor
     public Player()
     {
@@ -64,5 +66,10 @@ public class Player
             return true;
         }
         return false;
+    }
+
+    public void AddPowerUp(PowerUp powerUp)
+    {
+        powerUps.Add(powerUp);
     }
 }

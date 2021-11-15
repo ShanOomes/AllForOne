@@ -8,6 +8,9 @@ public class GameManager : MonoBehaviour
     private Player[] players;
     private List<GameObject> units = new List<GameObject>();
     public int cp = 0;
+
+    public PowerUp[] arrPowerups = new PowerUp[3];
+    public GameObject terrain;
     private void Awake()
     {
         if (instance == null)
@@ -24,8 +27,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        string[] names = { "Blue", "Red", "Yellow" };
-        Color[] colors = { Color.blue, Color.red, Color.yellow };
+        string[] names = { "Blue", "Red" };
+        Color[] colors = { Color.blue, Color.red };
 
         players = new Player[names.Length];
 
@@ -63,6 +66,11 @@ public class GameManager : MonoBehaviour
         units.Add(unit);
     }
 
+    public void RemoveUnit(GameObject unit)//Remove unit from global list of units created by players
+    {
+        units.Remove(unit);
+    }
+
     public void NextPhase()//Called when every player has created their units and have no balance left
     {
         cp = 0;
@@ -76,6 +84,31 @@ public class GameManager : MonoBehaviour
             if(units[i].GetComponent<Unit>().Team == GetCurrentPlayer().Name)
             {
                 units[i].transform.GetChild(3).gameObject.SetActive(state);
+            }
+        }
+    }
+
+    public void SpawnPowerup()
+    {
+        MeshCollider col = terrain.GetComponent<MeshCollider>();
+
+        int xRandom = 0;
+        int zRandom = 0;
+
+        xRandom = (int)Random.Range(col.bounds.min.x, col.bounds.max.x);
+        zRandom = (int)Random.Range(col.bounds.min.z, col.bounds.max.z);
+
+        Instantiate(arrPowerups[Random.Range(0,arrPowerups.Length)].Object, new Vector3(xRandom, 0.5f, zRandom), Quaternion.identity);
+    }
+
+    public void CheckUnits()
+    {
+        for (int i = 0; i < units.Count; i++)
+        {
+            Unit tmp = units[i].GetComponent<Unit>();
+            if(!tmp.CheckRoof()){
+                Destroy(units[i]);
+                RemoveUnit(units[i]);
             }
         }
     }
